@@ -7,9 +7,18 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: "DS App",
-      home: HomePage(),
+      theme: ThemeData.light(useMaterial3: true).copyWith(
+          appBarTheme: AppBarTheme(
+        backgroundColor: ThemeData.light().colorScheme.primaryContainer,
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 25,
+          color: ThemeData.light().colorScheme.onPrimaryContainer,
+        ),
+      )),
+      home: const HomePage(),
     );
   }
 }
