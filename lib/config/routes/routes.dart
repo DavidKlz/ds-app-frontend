@@ -4,4 +4,5 @@ class Routes {
   static const String login = "/login";
   static const String formularVerwaltung = "/formularverwaltung";
   static const String formular = "/formular";
+  static const String dynMask = "/dynMask";
 }

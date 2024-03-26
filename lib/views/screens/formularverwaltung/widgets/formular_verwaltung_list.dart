@@ -11,11 +11,12 @@ class FormularVerwaltungList extends StatefulWidget {
   State<FormularVerwaltungList> createState() => _FormularVerwaltungListState();
 }
 
-class _FormularVerwaltungListState extends State<FormularVerwaltungList> {
+class _FormularVerwaltungListState extends State<FormularVerwaltungList>
+    with RouteAware {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: (BlocProvider.of<FormularVerwaltungBloc>(context).state
+      children: (context.read<FormularVerwaltungBloc>().state
               as FormularVerwaltungFetched)
           .forms
           .map(
@@ -23,5 +24,11 @@ class _FormularVerwaltungListState extends State<FormularVerwaltungList> {
           )
           .toList(),
     );
+  }
+
+  @override
+  void didPush() {
+    context.read<FormularVerwaltungBloc>().add(FetchFormularVerwaltung());
+    super.didPush();
   }
 }

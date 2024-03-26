@@ -10,7 +10,7 @@ import '../models/formular.dart';
 class FormularProvider {
   Future<List<Formular>> fetchFormulare() async {
     try {
-      final repsonse = await http.get(Uri.parse(EitcoUrls.formular));
+      final repsonse = await http.get(Uri.parse(EitcoUrls.formulare));
       List<dynamic> json = jsonDecode(repsonse.body);
 
       List<Formular> formulare = List.empty(growable: true);
@@ -33,7 +33,7 @@ class FormularProvider {
     }
   }
 
-  Future<Formular?> createFormular(Formular formular) async {
+  Future<Formular> createFormular(Formular formular) async {
     try {
       final repsonse = await http.post(Uri.parse(EitcoUrls.createFormular),
           headers: EitcoConstants.defaultJsonRequestHeader,
@@ -41,7 +41,7 @@ class FormularProvider {
 
       return Formular.fromJson(repsonse.body);
     } catch (err) {
-      return null;
+      return Formular.empty();
     }
   }
 
@@ -54,15 +54,15 @@ class FormularProvider {
     }
   }
 
-  Future<Formular?> updateFormular(Formular formular) async {
+  Future<Formular> updateFormular(Formular formular) async {
     try {
       final response = await http.put(
-          Uri.parse(EitcoUrls.formularById(formular.id!)),
+          Uri.parse(EitcoUrls.formularById(formular.id)),
           headers: EitcoConstants.defaultJsonRequestHeader,
           body: formular.toJson());
       return Formular.fromJson(response.body);
     } catch (err) {
-      return null;
+      return Formular.empty();
     }
   }
 }

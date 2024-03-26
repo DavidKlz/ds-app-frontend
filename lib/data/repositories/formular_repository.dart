@@ -40,12 +40,9 @@ class FormularRepository {
     }
   }
 
-  Future<Formular?> createFormular(Formular formular) async {
-    Formular? newForm = await _provider.createFormular(formular);
-
-    if (newForm != null) {
-      formularCache.add(newForm);
-    }
+  Future<Formular> createFormular(Formular formular) async {
+    Formular newForm = await _provider.createFormular(formular);
+    formularCache.add(newForm);
 
     return newForm;
   }
@@ -60,13 +57,11 @@ class FormularRepository {
     return deleted;
   }
 
-  Future<Formular?> updateFormular(Formular formular) async {
-    Formular? updatedForm = await _provider.updateFormular(formular);
+  Future<Formular> updateFormular(Formular formular) async {
+    Formular updatedForm = await _provider.updateFormular(formular);
 
-    if (updatedForm != null) {
-      formularCache.removeWhere((element) => element.id == formular.id);
-      formularCache.add(updatedForm);
-    }
+    formularCache.removeWhere((element) => element.id == formular.id);
+    formularCache.add(updatedForm);
 
     return updatedForm;
   }

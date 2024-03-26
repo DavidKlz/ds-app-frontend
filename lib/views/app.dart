@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'pages/home/home_page.dart';
+import '../config/routes/route_generator.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -9,6 +9,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "DS App",
+      onGenerateRoute: RouteGenerator.onGenerateRoute,
       theme: ThemeData.light(useMaterial3: true).copyWith(
           appBarTheme: AppBarTheme(
         backgroundColor: ThemeData.light().colorScheme.primaryContainer,
@@ -18,7 +19,6 @@ class App extends StatelessWidget {
           color: ThemeData.light().colorScheme.onPrimaryContainer,
         ),
       )),
-      home: const HomePage(),
     );
   }
 }

@@ -1,38 +1,59 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
+import '../enums/control_type.dart';
+import '../enums/data_type.dart';
+
 class Variable {
-  String? id;
-  bool? isRequired;
-  bool? isEditable;
-  String? name;
-  int? controlTypeId;
-  int? dataTypeId;
+  String id;
+  bool isRequired;
+  bool isEditable;
+  String name;
+  List<String> values;
+  ControlType controlType;
+  DataType dataType;
 
   Variable({
-    this.id,
-    this.isRequired,
-    this.isEditable,
-    this.name,
-    this.controlTypeId,
-    this.dataTypeId,
+    required this.id,
+    required this.isRequired,
+    required this.isEditable,
+    required this.name,
+    required this.values,
+    required this.controlType,
+    required this.dataType,
   });
+
+  factory Variable.empty() {
+    return Variable(
+      id: "",
+      isEditable: false,
+      isRequired: false,
+      name: "",
+      values: [],
+      controlType: ControlType.textField,
+      dataType: DataType.text,
+    );
+  }
 
   Variable copyWith({
     String? id,
     bool? isRequired,
     bool? isEditable,
     String? name,
-    int? controlTypeId,
-    int? dataTypeId,
+    List<String>? values,
+    ControlType? controlType,
+    DataType? dataType,
   }) {
     return Variable(
       id: id ?? this.id,
       isRequired: isRequired ?? this.isRequired,
       isEditable: isEditable ?? this.isEditable,
       name: name ?? this.name,
-      controlTypeId: controlTypeId ?? this.controlTypeId,
-      dataTypeId: dataTypeId ?? this.dataTypeId,
+      values: values ?? this.values,
+      controlType: controlType ?? this.controlType,
+      dataType: dataType ?? this.dataType,
     );
   }
 
@@ -42,20 +63,23 @@ class Variable {
       'isRequired': isRequired,
       'isEditable': isEditable,
       'name': name,
-      'controlTypeId': controlTypeId,
-      'dataTypeId': dataTypeId,
+      'values': values,
+      'controlTypeId': controlType.id,
+      'dataTypeId': dataType.id,
     };
   }
 
   factory Variable.fromMap(Map<String, dynamic> map) {
     return Variable(
-      id: map['id'] != null ? map['id'] as String : null,
-      isRequired: map['isRequired'] != null ? map['isRequired'] as bool : null,
-      isEditable: map['isEditable'] != null ? map['isEditable'] as bool : null,
-      name: map['name'] != null ? map['name'] as String : null,
-      controlTypeId:
-          map['controlTypeId'] != null ? map['controlTypeId'] as int : null,
-      dataTypeId: map['dataTypeId'] != null ? map['dataTypeId'] as int : null,
+      id: map['id'] as String,
+      isRequired: map['required'] as bool,
+      isEditable: map['editable'] as bool,
+      name: map['name'] as String,
+      values: List<String>.from((map['values'] as List<dynamic>).map<String>(
+        (x) => x.toString(),
+      )),
+      controlType: ControlType.ofIndex(map['controlTypeId'] as int),
+      dataType: DataType.ofIndex(map['dataTypeId'] as int),
     );
   }
 
@@ -66,7 +90,7 @@ class Variable {
 
   @override
   String toString() {
-    return 'Variable(id: $id, isRequired: $isRequired, isEditable: $isEditable, name: $name, controlTypeId: $controlTypeId, dataTypeId: $dataTypeId)';
+    return 'Variable(id: $id, isRequired: $isRequired, isEditable: $isEditable, name: $name, values: $values, controlType: $controlType, dataType: $dataType)';
   }
 
   @override
@@ -77,8 +101,9 @@ class Variable {
         other.isRequired == isRequired &&
         other.isEditable == isEditable &&
         other.name == name &&
-        other.controlTypeId == controlTypeId &&
-        other.dataTypeId == dataTypeId;
+        listEquals(other.values, values) &&
+        other.controlType == controlType &&
+        other.dataType == dataType;
   }
 
   @override
@@ -87,7 +112,8 @@ class Variable {
         isRequired.hashCode ^
         isEditable.hashCode ^
         name.hashCode ^
-        controlTypeId.hashCode ^
-        dataTypeId.hashCode;
+        values.hashCode ^
+        controlType.hashCode ^
+        dataType.hashCode;
   }
 }

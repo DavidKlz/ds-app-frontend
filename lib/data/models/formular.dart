@@ -6,20 +6,20 @@ import 'package:flutter/foundation.dart';
 import 'variable.dart';
 
 class Formular {
-  String? id;
-  String? name;
-  Set<Variable>? variables;
+  String id;
+  String name;
+  List<Variable> variables;
 
   Formular({
-    this.id,
-    this.name,
-    this.variables,
+    required this.id,
+    required this.name,
+    required this.variables,
   });
 
   Formular copyWith({
     String? id,
     String? name,
-    Set<Variable>? variables,
+    List<Variable>? variables,
   }) {
     return Formular(
       id: id ?? this.id,
@@ -28,26 +28,36 @@ class Formular {
     );
   }
 
+  Formular copyOf(Formular form) {
+    return Formular(
+      id: form.id,
+      name: form.name,
+      variables: form.variables,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'variables': variables?.map((x) => x.toMap()).toList(),
+      'variables': variables.map((x) => x.toMap()).toList(),
     };
   }
 
   factory Formular.fromMap(Map<String, dynamic> map) {
     return Formular(
-      id: map['id'] != null ? map['id'] as String : null,
-      name: map['name'] != null ? map['name'] as String : null,
-      variables: map['variables'] != null
-          ? Set<Variable>.from(
-              (map['variables'] as List<int>).map<Variable?>(
-                (x) => Variable.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
+      id: map['id'] as String,
+      name: map['name'] as String,
+      variables: List<Variable>.from(
+        (map['variables'] as List<dynamic>).map<Variable>(
+          (x) => Variable.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
     );
+  }
+
+  factory Formular.empty() {
+    return Formular(id: "", name: "", variables: []);
   }
 
   String toJson() => json.encode(toMap());
@@ -64,7 +74,7 @@ class Formular {
 
     return other.id == id &&
         other.name == name &&
-        setEquals(other.variables, variables);
+        listEquals(other.variables, variables);
   }
 
   @override
